@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexify Store | Premium Apps Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="antialiased">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <nav class="navbar-nx fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="logo-area">
+                <span class="logo-text">NEXIFY<span class="text-blue-500">STORE</span></span>
+            </div>
+            
+            <div class="nav-links hidden md:flex items-center gap-8">
+                <a href="#" onclick="showPage('home')" class="nav-link active">Home</a>
+                <a href="#" onclick="showPage('catalog')" class="nav-link">Catalog</a>
+                <a href="#" class="nav-link">Transaction</a>
+            </div>
+
+            <div class="flex items-center gap-5">
+                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="login-btn-premium">Sign In</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-10 px-6 max-w-7xl mx-auto">
+        <div id="page-home" class="page-content active">
+            <section class="hero-card mb-12">
+                <div class="hero-content">
+                    <div class="promo-tag">Special Offer 2026</div>
+                    <h1>Unleash <span class="gradient-text">Premium</span> Experience</h1>
+                    <p>Dapatkan akses aplikasi original dengan harga paling kompetitif di pasar. Tanpa VPN, tanpa ribet.</p>
+                    <div class="hero-btns">
+                        <button class="btn-primary">Explore Now</button>
+                        <button class="btn-secondary">Check Status</button>
+                    </div>
+                </div>
+                <div class="hero-visual hidden lg:block">
+                    <i class="fa-solid fa-shield-halved floating-icon"></i>
+                </div>
+            </section>
+
+            <div class="section-header">
+                <h2><i class="fa-solid fa-bolt-lightning text-yellow-400"></i> Best Seller</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" id="app-list">
+                </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

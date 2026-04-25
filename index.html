@@ -9,53 +9,81 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="antialiased">
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-
     <nav class="navbar-nx fixed w-full z-50">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="logo-area">
-                <span class="logo-text">NEXIFY<span class="text-blue-500">STORE</span></span>
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="logo-text" onclick="showPage('home')" style="cursor:pointer">
+                NEXIFY<span class="text-blue-500">STORE</span>
             </div>
-            
-            <div class="nav-links hidden md:flex items-center gap-8">
-                <a href="#" onclick="showPage('home')" class="nav-link active">Home</a>
-                <a href="#" onclick="showPage('catalog')" class="nav-link">Catalog</a>
-                <a href="#" class="nav-link">Transaction</a>
-            </div>
-
-            <div class="flex items-center gap-5">
-                <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="login-btn-premium">Sign In</button>
+            <div class="flex items-center gap-4">
+                <button class="nav-link" onclick="showPage('home')">Home</button>
+                <button class="login-btn">Sign In</button>
             </div>
         </div>
     </nav>
 
-    <main class="pt-28 pb-10 px-6 max-w-7xl mx-auto">
+    <main class="pt-24 pb-10 px-6 max-w-7xl mx-auto">
+        
         <div id="page-home" class="page-content active">
-            <section class="hero-card mb-12">
-                <div class="hero-content">
-                    <div class="promo-tag">Special Offer 2026</div>
-                    <h1>Unleash <span class="gradient-text">Premium</span> Experience</h1>
-                    <p>Dapatkan akses aplikasi original dengan harga paling kompetitif di pasar. Tanpa VPN, tanpa ribet.</p>
-                    <div class="hero-btns">
-                        <button class="btn-primary">Explore Now</button>
-                        <button class="btn-secondary">Check Status</button>
-                    </div>
-                </div>
-                <div class="hero-visual hidden lg:block">
-                    <i class="fa-solid fa-shield-halved floating-icon"></i>
-                </div>
-            </section>
-
-            <div class="section-header">
-                <h2><i class="fa-solid fa-bolt-lightning text-yellow-400"></i> Best Seller</h2>
-                <div class="divider"></div>
+            <div class="hero-mini mb-10">
+                <h1 class="text-2xl font-bold">Pilih Aplikasi <span class="text-blue-500">Premium</span></h1>
+                <p class="text-slate-400 text-sm">Proses otomatis, garansi anti-back.</p>
             </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6" id="app-list">
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="app-list">
                 </div>
         </div>
+
+        <div id="page-checkout" class="page-content">
+            <div class="checkout-container max-w-2xl mx-auto">
+                <button onclick="showPage('home')" class="mb-6 text-sm text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
+                </button>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="product-info-card p-6 rounded-3xl bg-slate-900 border border-white/5">
+                        <div id="checkout-icon" class="w-20 h-20 bg-white rounded-2xl mb-4 flex items-center justify-center mx-auto"></div>
+                        <h2 id="checkout-name" class="text-xl font-bold text-center"></h2>
+                        <p id="checkout-price" class="text-blue-500 font-bold text-center mt-2"></p>
+                    </div>
+
+                    <div class="form-container space-y-4">
+                        <div class="input-group">
+                            <label>Nama Lengkap</label>
+                            <input type="text" id="buyer-name" placeholder="Masukkan nama...">
+                        </div>
+                        <div class="input-group">
+                            <label>Nomor WhatsApp</label>
+                            <input type="number" id="buyer-wa" placeholder="0812xxxx">
+                        </div>
+                        <div class="input-group">
+                            <label>Email (Opsional)</label>
+                            <input type="email" id="buyer-email" placeholder="email@gmail.com">
+                        </div>
+
+                        <label class="block mt-6 font-bold text-sm">Metode Pembayaran</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="pay-method" onclick="selectPay(this)">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_dana_blue.svg" alt="DANA">
+                            </div>
+                            <div class="pay-method" onclick="selectPay(this)">
+                                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/4/4b/Logo_GoPay.svg/1200px-Logo_GoPay.svg.png" alt="GOPAY">
+                            </div>
+                            <div class="pay-method" onclick="selectPay(this)">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dan_Brand_QRIS.png" alt="QRIS">
+                            </div>
+                            <div class="pay-method" onclick="selectPay(this)">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/Logo_BSI.png" alt="BSI">
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-blue-600 py-4 rounded-2xl font-bold mt-8 shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition" onclick="processOrder()">
+                            Bayar Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script src="script.js"></script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexify Store | Premium Apps Hub</title>
+    <title>Nexify Store | Ultra Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -11,12 +11,11 @@
 <body class="antialiased">
     <nav class="navbar-nx fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="logo-text" onclick="showPage('home')" style="cursor:pointer">
-                NEXIFY<span class="text-blue-500">STORE</span>
+            <div class="logo-text cursor-pointer" onclick="showPage('home')">
+                NEXIFY<span class="text-blue-400">STORE</span>
             </div>
-            <div class="flex items-center gap-4">
-                <button class="nav-link" onclick="showPage('home')">Home</button>
-                <button class="login-btn">Sign In</button>
+            <div id="nav-auth-info" class="flex items-center gap-4">
+                <button class="login-btn" onclick="showPage('auth')" id="login-nav-btn">Sign In</button>
             </div>
         </div>
     </nav>
@@ -24,68 +23,103 @@
     <main class="pt-24 pb-10 px-6 max-w-7xl mx-auto">
         
         <div id="page-home" class="page-content active">
-            <div class="hero-mini mb-10">
-                <h1 class="text-2xl font-bold">Pilih Aplikasi <span class="text-blue-500">Premium</span></h1>
-                <p class="text-slate-400 text-sm">Proses otomatis, garansi anti-back.</p>
+            <div class="hero-banner mb-10">
+                <div class="glow-effect"></div>
+                <h1 class="text-3xl font-black italic mb-2">UPGRADE YOUR STYLE.</h1>
+                <p class="text-slate-400 text-sm">Aplikasi premium original, garansi penuh, proses 1 detik.</p>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="app-list">
+            <div class="section-header flex items-center justify-between mb-6">
+                <h2 class="font-bold flex items-center gap-2"><i class="fa-solid fa-fire text-orange-500"></i> POPULER</h2>
+                <div class="h-[1px] flex-1 bg-white/5 ml-4"></div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5" id="app-list">
                 </div>
         </div>
 
         <div id="page-checkout" class="page-content">
-            <div class="checkout-container max-w-2xl mx-auto">
-                <button onclick="showPage('home')" class="mb-6 text-sm text-slate-400 hover:text-white">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
-                </button>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="product-info-card p-6 rounded-3xl bg-slate-900 border border-white/5">
-                        <div id="checkout-icon" class="w-20 h-20 bg-white rounded-2xl mb-4 flex items-center justify-center mx-auto"></div>
-                        <h2 id="checkout-name" class="text-xl font-bold text-center"></h2>
-                        <p id="checkout-price" class="text-blue-500 font-bold text-center mt-2"></p>
+            <div class="max-w-4xl mx-auto bg-slate-900/50 p-8 rounded-[2rem] border border-white/5 backdrop-blur-xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="text-center md:text-left">
+                        <div id="check-img" class="w-24 h-24 bg-white rounded-3xl mx-auto md:mx-0 mb-6 flex items-center justify-center p-4"></div>
+                        <h2 id="check-name" class="text-3xl font-black"></h2>
+                        <p id="check-price" class="text-blue-400 font-bold text-xl mt-2"></p>
+                        <div class="mt-6 p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20 text-xs text-blue-200">
+                            Layanan ini aktif selamanya/sesuai durasi. Garansi penuh jika terjadi kendala.
+                        </div>
                     </div>
-
-                    <div class="form-container space-y-4">
-                        <div class="input-group">
-                            <label>Nama Lengkap</label>
-                            <input type="text" id="buyer-name" placeholder="Masukkan nama...">
+                    <div class="space-y-4">
+                        <input type="text" id="order-name" placeholder="Nama Lengkap" class="input-nx">
+                        <input type="number" id="order-wa" placeholder="Nomor WhatsApp (08xxxx)" class="input-nx">
+                        <p class="text-xs font-bold text-slate-500 mt-4 uppercase tracking-widest">Pilih Pembayaran</p>
+                        <div class="grid grid-cols-2 gap-3" id="payment-methods">
+                            <div class="pay-card" onclick="selectPay(this, 'DANA')"><img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_dana_blue.svg"></div>
+                            <div class="pay-card" onclick="selectPay(this, 'GOPAY')"><img src="https://upload.wikimedia.org/wikipedia/id/thumb/4/4b/Logo_GoPay.svg/1200px-Logo_GoPay.svg.png"></div>
+                            <div class="pay-card" onclick="selectPay(this, 'QRIS')"><img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dan_Brand_QRIS.png"></div>
                         </div>
-                        <div class="input-group">
-                            <label>Nomor WhatsApp</label>
-                            <input type="number" id="buyer-wa" placeholder="0812xxxx">
-                        </div>
-                        <div class="input-group">
-                            <label>Email (Opsional)</label>
-                            <input type="email" id="buyer-email" placeholder="email@gmail.com">
-                        </div>
-
-                        <label class="block mt-6 font-bold text-sm">Metode Pembayaran</label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div class="pay-method" onclick="selectPay(this)">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_dana_blue.svg" alt="DANA">
-                            </div>
-                            <div class="pay-method" onclick="selectPay(this)">
-                                <img src="https://upload.wikimedia.org/wikipedia/id/thumb/4/4b/Logo_GoPay.svg/1200px-Logo_GoPay.svg.png" alt="GOPAY">
-                            </div>
-                            <div class="pay-method" onclick="selectPay(this)">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dan_Brand_QRIS.png" alt="QRIS">
-                            </div>
-                            <div class="pay-method" onclick="selectPay(this)">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/Logo_BSI.png" alt="BSI">
-                            </div>
-                        </div>
-
-                        <button class="w-full bg-blue-600 py-4 rounded-2xl font-bold mt-8 shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition" onclick="processOrder()">
-                            Bayar Sekarang
-                        </button>
+                        <button onclick="confirmOrder()" class="btn-confirm w-full">PROSES SEKARANG</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div id="page-auth" class="page-content">
+            <div class="max-w-md mx-auto auth-card">
+                <h2 class="text-2xl font-bold mb-6">Nexify Auth</h2>
+                <input type="email" id="email" placeholder="Email" class="input-nx mb-4">
+                <input type="password" id="pass" placeholder="Password" class="input-nx mb-6">
+                <button onclick="handleLogin()" class="btn-confirm w-full mb-4">Masuk</button>
+                <p class="text-center text-xs text-slate-500">Gunakan akun admin untuk akses dashboard</p>
+            </div>
+        </div>
+
+        <div id="page-admin" class="page-content">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h1 class="text-2xl font-black">ADMIN PANEL</h1>
+                    <p class="text-sm text-slate-400">Kelola stok aplikasi secara real-time</p>
+                </div>
+                <button onclick="handleLogout()" class="text-red-400 text-xs font-bold bg-red-500/10 px-4 py-2 rounded-lg">Sign Out</button>
+            </div>
+
+            <div class="bg-slate-900 border border-white/5 p-6 rounded-[2rem] mb-10">
+                <h3 class="font-bold mb-4">Tambah Produk</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" id="adm-name" placeholder="Nama APK" class="input-nx text-sm">
+                    <input type="text" id="adm-price" placeholder="Harga (Rp 15k)" class="input-nx text-sm">
+                    <input type="text" id="adm-img" placeholder="Link Ikon (URL)" class="input-nx text-sm">
+                    <button onclick="addProductToFB()" class="bg-blue-600 rounded-xl font-bold text-sm">Update Database</button>
+                </div>
+            </div>
+
+            <div id="admin-list" class="space-y-3">
+                </div>
+        </div>
+
     </main>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyrYHhWV9vLGOYH3lBykoLa6JMIsJ7T90",
+            authDomain: "nexify-ed2c6.firebaseapp.com",
+            projectId: "nexify-ed2c6",
+            storageBucket: "nexify-ed2c6.firebasestorage.app",
+            messagingSenderId: "654247705358",
+            appId: "1:654247705358:web:a31b479996f673b826355f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Bridge to script.js
+        window.fb = { auth, db, methods: { signInWithEmailAndPassword, onAuthStateChanged, signOut, collection, addDoc, onSnapshot, deleteDoc, doc } };
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,66 +1,116 @@
-// Daftar Aplikasi Premium Terlengkap
-const apps = [
-    { id: 1, name: "Netflix UHD", price: "Rp 25.000", img: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Netflix-new-icon.png" },
-    { id: 2, name: "Spotify Prem", price: "Rp 15.000", img: "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" },
-    { id: 3, name: "YouTube Prem", price: "Rp 10.000", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" },
-    { id: 4, name: "Canva Pro", price: "Rp 12.000", img: "https://www.vectorlogo.zone/logos/canva/canva-icon.svg" },
-    { id: 5, name: "ChatGPT Plus", price: "Rp 50.000", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" },
-    { id: 6, name: "Disney+ Hot", price: "Rp 20.000", img: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" },
-    { id: 7, name: "Alight Motion", price: "Rp 15.000", img: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Alight_Motion_2022.png" },
-    { id: 8, name: "PicsArt Pro", price: "Rp 10.000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/PicsArt_logo.svg/1200px-PicsArt_logo.svg.png" },
-    { id: 9, name: "Iqiyi Vip", price: "Rp 18.000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/IQIYI_logo.svg/1280px-IQIYI_logo.svg.png" },
-    { id: 10, name: "Vidio Prem", price: "Rp 15.000", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Vidio_logo.svg/1200px-Vidio_logo.svg.png" }
-];
+let selectedPayment = "";
 
-// 1. Render Produk ke Home
-function init() {
+// 1. Realtime Sync dengan Firestore
+function initFirebase() {
+    const { onSnapshot, collection } = window.fb.methods;
+    const db = window.fb.db;
+
+    onSnapshot(collection(db, "products"), (snapshot) => {
+        const productData = [];
+        snapshot.forEach(doc => productData.push({ id: doc.id, ...doc.data() }));
+        renderAll(productData);
+    });
+
+    // Cek Status Login
+    window.fb.methods.onAuthStateChanged(window.fb.auth, (user) => {
+        const btn = document.getElementById('login-nav-btn');
+        if (user) {
+            btn.innerText = user.email === "nexifyadmin1@gmail.com" ? "ADMIN PANEL" : "MY ACCOUNT";
+            btn.onclick = () => showPage(user.email === "nexifyadmin1@gmail.com" ? 'admin' : 'home');
+        }
+    });
+}
+
+// 2. Render Tampilan
+function renderAll(data) {
+    // Katalog Home
     const list = document.getElementById('app-list');
-    list.innerHTML = apps.map(app => `
-        <div class="app-card" onclick="goToCheckout(${app.id})">
-            <div class="icon-box">
-                <img src="${app.img}" alt="${app.name}">
+    list.innerHTML = data.map(app => `
+        <div class="app-card" onclick="openCheckout('${app.name}', '${app.price}', '${app.img}')">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center overflow-hidden p-3">
+                    <img src="${app.img}" class="object-contain w-full h-full">
+                </div>
             </div>
-            <h4 class="text-xs font-bold">${app.name}</h4>
-            <p class="text-blue-500 font-bold text-[10px] mt-1">${app.price}</p>
+            <h4 class="text-xs font-bold text-center uppercase tracking-tight">${app.name}</h4>
+            <p class="text-blue-400 font-black text-center text-xs mt-2">${app.price}</p>
+        </div>
+    `).join('');
+
+    // List Admin
+    const admList = document.getElementById('admin-list');
+    admList.innerHTML = data.map(app => `
+        <div class="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5">
+            <div class="flex items-center gap-4">
+                <img src="${app.img}" class="w-10 h-10 rounded-lg">
+                <p class="font-bold text-sm">${app.name} - ${app.price}</p>
+            </div>
+            <button onclick="deleteProduct('${app.id}')" class="text-red-500 text-xs"><i class="fa-solid fa-trash"></i></button>
         </div>
     `).join('');
 }
 
-// 2. Logika Pindah Halaman
-function showPage(pageId) {
-    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + pageId).classList.add('active');
-    window.scrollTo(0,0);
-}
-
-// 3. Menuju Checkout & Load Data Produk Terpilih
-function goToCheckout(id) {
-    const app = apps.find(a => a.id === id);
-    document.getElementById('checkout-name').innerText = app.name;
-    document.getElementById('checkout-price').innerText = app.price;
-    document.getElementById('checkout-icon').innerHTML = `<img src="${app.img}" style="width:50px">`;
+// 3. Logika Checkout
+function openCheckout(name, price, img) {
+    document.getElementById('check-name').innerText = name;
+    document.getElementById('check-price').innerText = price;
+    document.getElementById('check-img').innerHTML = `<img src="${img}" class="w-16">`;
     showPage('checkout');
 }
 
-// 4. Pilih Metode Pembayaran
-function selectPay(el) {
-    document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+function selectPay(el, method) {
+    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
+    selectedPayment = method;
 }
 
-// 5. Simulasi Order
-function processOrder() {
-    const name = document.getElementById('buyer-name').value;
-    const wa = document.getElementById('buyer-wa').value;
-    const pay = document.querySelector('.pay-method.selected');
-
-    if(!name || !wa || !pay) {
-        alert("Mohon isi nama, WA, dan pilih metode pembayaran!");
-        return;
-    }
-
-    alert(`Terima kasih ${name}!\nPesanan sedang diproses. Instruksi pembayaran akan dikirim ke WhatsApp ${wa}`);
+function confirmOrder() {
+    const name = document.getElementById('order-name').value;
+    const wa = document.getElementById('order-wa').value;
+    if(!name || !wa || !selectedPayment) return alert("Lengkapi data & pembayaran!");
+    
+    alert(`Order Berhasil!\nProduk: ${document.getElementById('check-name').innerText}\nPembayaran: ${selectedPayment}\nAdmin akan segera hubungi ke WA: ${wa}`);
     showPage('home');
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// 4. Logika Admin
+async function addProductToFB() {
+    const name = document.getElementById('adm-name').value;
+    const price = document.getElementById('adm-price').value;
+    const img = document.getElementById('adm-img').value;
+
+    if(name && price && img) {
+        await window.fb.methods.addDoc(window.fb.methods.collection(window.fb.db, "products"), { name, price, img });
+        alert("Data terkirim ke Cloud!");
+        ['adm-name', 'adm-price', 'adm-img'].forEach(id => document.getElementById(id).value = "");
+    }
+}
+
+async function deleteProduct(id) {
+    if(confirm("Hapus dari database?")) {
+        await window.fb.methods.deleteDoc(window.fb.methods.doc(window.fb.db, "products", id));
+    }
+}
+
+// 5. Auth Logic
+async function handleLogin() {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('pass').value;
+    try {
+        await window.fb.methods.signInWithEmailAndPassword(window.fb.auth, email, pass);
+        alert("Login Sukses!");
+        showPage(email === "nexifyadmin1@gmail.com" ? 'admin' : 'home');
+    } catch (e) { alert("Error: " + e.message); }
+}
+
+function handleLogout() {
+    window.fb.methods.signOut(window.fb.auth);
+    location.reload();
+}
+
+function showPage(id) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', initFirebase);
